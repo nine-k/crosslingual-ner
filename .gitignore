@@ -1,3 +1,7 @@
+*.zip
+# w2v folders
+**/*_w2v
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
