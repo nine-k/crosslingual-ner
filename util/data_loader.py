@@ -29,8 +29,8 @@ def download(url, dest):
     if total_size != 0 and t.n != total_size:
         print("ERROR, something went wrong")
 
-def get_language_embeddings(dest='./', force=False):
-    for lang, url in WORD2VEC_URLS.items():
+def get_language_embeddings(word2vec_urls=WORD2VEC_URLS, dest='./', force=False):
+    for lang, url in word2vec_urls.items():
         lang_dest = os.path.join(dest, '%s_w2v' % lang)
         if os.path.exists(lang_dest) and not force:
             print("%s is already downloaded, moving on" % lang)
