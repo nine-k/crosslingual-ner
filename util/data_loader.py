@@ -1,8 +1,10 @@
 from zipfile import ZipFile
 import requests
-import os
-from helper_functions import is_notebook
 
+import os
+import shutil
+
+from helper_functions import is_notebook
 if is_notebook():
     from tqdm.tqdm_notebook import tqdm
 else:
@@ -29,6 +31,20 @@ def download(url, dest):
     if total_size != 0 and t.n != total_size:
         print("ERROR, something went wrong")
 
+def download_and_unzip(url, dest):
+    zip_file = dest + '.zip'
+    download(url, zip_file)
+    with ZipFile(zip_file) as f:
+        f.extractall(dest)
+    os.remove(zip_file)
+
+def download_dataset(url="http://bsnlp.cs.helsinki.fi/TRAININGDATA_BSNLP_2019_shared_task.zip", dest='./train'):
+    download_and_unzip(url, dest)
+    files = os.listdir(os.path.join(dest, "training_pl_cs_ru_bg_rc1"))
+    for f in files:
+        shutil.move(os.path.join(dest, "training_pl_cs_ru_bg_rc1", f), os.path.join(dest, f))
+    os.rmdir(os.path.join(dest, "training_pl_cs_ru_bg_rc1"))
+
 def get_language_embeddings(word2vec_urls=WORD2VEC_URLS, dest='./', force=False):
     for lang, url in word2vec_urls.items():
         lang_dest = os.path.join(dest, '%s_w2v' % lang)
@@ -37,9 +53,4 @@ def get_language_embeddings(word2vec_urls=WORD2VEC_URLS, dest='./', force=False)
             continue
         print("loading and unzipping wordembeddings for %s" % lang)
         print("result will be located in %s" % lang_dest)
-        zip_file = './%s.zip' % lang
-        download(url, zip_file)
-        with ZipFile(zip_file) as w2v_zip:
-            w2v_zip.extractall(os.path.join(dest, '%s_w2v' % lang))
-        os.remove(zip_file)
-
+        download_and_unzip(url, lang_dest)
