@@ -4,7 +4,7 @@ import requests
 import os
 import shutil
 
-from helper_functions import is_notebook
+from .helper_functions import is_notebook
 if is_notebook():
     from tqdm.tqdm_notebook import tqdm
 else:
