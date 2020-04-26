@@ -6,7 +6,7 @@ import shutil
 
 from .helper_functions import is_notebook
 if is_notebook():
-    from tqdm.tqdm_notebook import tqdm
+    from tqdm import tqdm_notebook as tqdm
 else:
     from tqdm import tqdm
 
