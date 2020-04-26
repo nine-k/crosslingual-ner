@@ -14,7 +14,7 @@ def get_doc_pairs(path, langs=LANGS):
     annotated_path = os.path.join(path, 'annotated')
     raw_path = os.path.join(path, 'raw')
     for lang in LANGS:
-        annotated_dir = os.path.join(raw_path, lang)
+        annotated_dir = os.path.join(annotated_path, lang)
         raw_dir = os.path.join(raw_path, lang)
         annotated = sorted(os.listdir(annotated_dir))
         raw = sorted(os.listdir(raw_dir))
