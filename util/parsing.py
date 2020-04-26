@@ -114,7 +114,7 @@ def get_formatted_dataset(path='./train', langs=LANGS):
 
         for doc_pair in doc_pairs[lang]:
             res, _ = fix_doc_pair(*doc_pair)
-            doc_token_spans = list(tokenizer.span_tokenize(open(doc_pair[0]).read()))
+            doc_token_spans = list(tokenizer.span_tokenize(res['text']))
             res['token_spans'] = doc_token_spans
             docs_and_spans[lang].append(res)
 
