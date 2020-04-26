@@ -60,6 +60,12 @@ def fix_doc_pair(raw_path, annot_path, verbose=False):
                 .replace('„', '"')
     raw = open(raw_path, 'r')
     annotation = open(annot_path, 'r')
+
+    raw.readline() # part
+    raw.readline() # lang
+    raw.readline() # date
+    raw.readline() # source
+
     raw_text = clean_string(raw.read())
     annotation.readline() # first line does not contain tags
     total = 0
