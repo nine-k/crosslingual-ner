@@ -45,6 +45,9 @@ def download_dataset(url="http://bsnlp.cs.helsinki.fi/TRAININGDATA_BSNLP_2019_sh
         shutil.move(os.path.join(dest, "training_pl_cs_ru_bg_rc1", f), os.path.join(dest, f))
     os.rmdir(os.path.join(dest, "training_pl_cs_ru_bg_rc1"))
 
+def download_test(url="http://bsnlp.cs.helsinki.fi/TESTDATA_BSNLP_2019_shared_task.zip", dest='./test'):
+    download_and_unzip(url, dest)
+
 def get_language_embeddings(word2vec_urls=WORD2VEC_URLS, dest='./', force=False):
     for lang, url in word2vec_urls.items():
         lang_dest = os.path.join(dest, '%s_w2v' % lang)

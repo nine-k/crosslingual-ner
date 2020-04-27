@@ -10,7 +10,7 @@ ENTITY_TAGS = ['EVT', 'GPE', 'LOC', 'ORG', 'PER', 'PRO']
 # RAW_PATH = os.path.join(TRAIN_PATH, 'raw')
 # ANNOTATED_PATH = os.path.join(TRAIN_PATH, 'annotated')
 
-def get_doc_pairs(path, langs=LANGS):
+def get_doc_pairs_train(path, langs=LANGS):
     res = defaultdict(list)
     annotated_path = os.path.join(path, 'annotated')
     raw_path = os.path.join(path, 'raw')
@@ -26,6 +26,32 @@ def get_doc_pairs(path, langs=LANGS):
                         ),
                         zip(raw, annotated)))
     return res
+
+def get_doc_pairs_test(path, langs=LANGS):
+    sets = ['nord_stream', 'ryanair']
+
+    res = defaultdict(list)
+    annotated_path = os.path.join(path, 'annotated')
+    raw_path = os.path.join(path, 'raw')
+    for lang in LANGS:
+        for test_set in sets:
+            annotated_dir = os.path.join(annotated_path, test_set, lang)
+            raw_dir = os.path.join(raw_path, test_set, lang)
+            annotated = sorted(os.listdir(annotated_dir))
+            raw = sorted(os.listdir(raw_dir))
+            res[lang].extend(list(map(
+                            lambda x: (
+                                os.path.join(raw_dir, x[0]),
+                                os.path.join(annotated_dir, x[1])
+                            ),
+                            zip(raw, annotated))))
+    return res
+
+def get_doc_pairs(path, langs=LANGS, train=True):
+    if train:
+        return get_doc_pairs_train(path, langs)
+    else:
+        return get_doc_pairs_test(path, langs)
 
 def get_entity_spans(document, query, additional_data=[]):
     def find_all(doc, q):
@@ -97,7 +123,7 @@ def fix_doc_pair(raw_path, annot_path, verbose=False):
     }
     return res, (total, errors)
 
-def get_formatted_dataset(path='./train', langs=LANGS, dont_keep_id=True):
+def get_formatted_dataset(path='./train', train=True, langs=LANGS, dont_keep_id=True):
     def intersect(s1, e1, s2, e2):
         if e1 <= s2:
             return -1 #left
@@ -106,7 +132,7 @@ def get_formatted_dataset(path='./train', langs=LANGS, dont_keep_id=True):
         else:
             return 0 #intersect
 
-    doc_pairs = get_doc_pairs(path, langs)
+    doc_pairs = get_doc_pairs(path, langs, train=train)
     docs_and_spans = defaultdict(list)
     final_dataset = defaultdict(list)
     for lang in langs:
@@ -124,7 +150,10 @@ def get_formatted_dataset(path='./train', langs=LANGS, dont_keep_id=True):
             entity_spans = doc['entity_spans']
             text = doc['text']
             entity_iter = iter(entity_spans)
-            (cur_entity_s, cur_entity_e), ent_data = next(entity_iter)
+            try:
+                (cur_entity_s, cur_entity_e), ent_data = next(entity_iter)
+            except StopIteration:
+                cur_entity_s, cur_entity_e = -1, -1
             ent_tag = 'O'
             new_ent = True
             res_sent = []
