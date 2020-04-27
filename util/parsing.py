@@ -6,6 +6,7 @@ nltk.download('all')
 
 TRAIN_PATH = "./train"
 LANGS = ['bg', 'cs', 'pl', 'ru']
+ENTITY_TAGS = ['EVT', 'GPE', 'LOC', 'ORG', 'PER', 'PRO']
 # RAW_PATH = os.path.join(TRAIN_PATH, 'raw')
 # ANNOTATED_PATH = os.path.join(TRAIN_PATH, 'annotated')
 
@@ -96,7 +97,7 @@ def fix_doc_pair(raw_path, annot_path, verbose=False):
     }
     return res, (total, errors)
 
-def get_formatted_dataset(path='./train', langs=LANGS):
+def get_formatted_dataset(path='./train', langs=LANGS, dont_keep_id=True):
     def intersect(s1, e1, s2, e2):
         if e1 <= s2:
             return -1 #left
@@ -132,10 +133,10 @@ def get_formatted_dataset(path='./train', langs=LANGS):
                 intersection = intersect(token_s, token_e, cur_entity_s, cur_entity_e)
                 if intersection == 0:
                     if new_ent:
-                        ent_tag = 'B_' + ent_data['id']
+                        ent_tag = 'B_' + (ent_data['class'] if dont_keep_id else ent_data['id'])
                         new_ent = False
                     else:
-                        ent_tag = 'I_' + ent_data['id']
+                        ent_tag = 'I_' + (ent_data['class'] if dont_keep_id else ent_data['id'])
                 elif intersection == 1:
                     new_ent = True
                     ent_tag = '0'
