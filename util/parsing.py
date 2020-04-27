@@ -80,7 +80,7 @@ def get_entity_spans(document, query, additional_data=[]):
     return matches
 
 def fix_doc_pair(raw_path, annot_path, verbose=False):
-    unwanted_chars = r'[\u200b\uf02d]'
+    unwanted_chars = r'[\u200b\u200d\uf02d]'
     def clean_string(s):
         return re.sub(unwanted_chars, '', s)\
                 .replace('“', '"')\
