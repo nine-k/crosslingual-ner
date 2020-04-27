@@ -139,13 +139,13 @@ def get_formatted_dataset(path='./train', langs=LANGS, dont_keep_id=True):
                         ent_tag = 'I_' + (ent_data['class'] if dont_keep_id else ent_data['id'])
                 elif intersection == 1:
                     new_ent = True
-                    ent_tag = '0'
+                    ent_tag = 'O'
                     try:
                         (cur_entity_s, cur_entity_e), ent_data = next(entity_iter)
                     except StopIteration:
                         cur_entity_s, cur_entity_e = -1, -1
                 else:
-                    ent_tag = '0'
+                    ent_tag = 'O'
                     new_ent = True
                 res_sent.append((token, ent_tag))
             final_dataset[lang].append(res_sent)
