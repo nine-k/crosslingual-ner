@@ -14,7 +14,7 @@ WORD2VEC_URLS = { # source http://vectors.nlpl.eu/repository/
     'bg': 'http://vectors.nlpl.eu/repository/20/33.zip',
     'ru': 'http://vectors.nlpl.eu/repository/20/65.zip',
     'pl': 'http://vectors.nlpl.eu/repository/20/62.zip',
-    'cz': 'http://vectors.nlpl.eu/repository/20/37.zip',
+    'cs': 'http://vectors.nlpl.eu/repository/20/37.zip',
 }
 
 def download(url, dest):
