@@ -1,6 +1,8 @@
 *.zip
 # w2v folders
 **/*_w2v
+**/train
+**/test
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
